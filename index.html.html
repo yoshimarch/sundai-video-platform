@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>駿台小中学部YouTube動画リンク集</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover .video-thumbnail img {
+            transform: scale(1.05);
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 0, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 15px solid white;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            margin-left: 3px;
+        }
+
+        .video-card:hover .play-button {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: rgba(255, 0, 0, 1);
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .video-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        /* スマホ対応（横2列） */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .header {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .video-card {
+                border-radius: 12px;
+            }
+
+            .video-thumbnail {
+                height: 120px;
+            }
+
+            .play-button {
+                width: 40px;
+                height: 40px;
+            }
+
+            .play-button::after {
+                border-left: 10px solid white;
+                border-top: 7px solid transparent;
+                border-bottom: 7px solid transparent;
+            }
+
+            .video-info {
+                padding: 12px;
+            }
+
+            .video-title {
+                font-size: 0.85rem;
+                -webkit-line-clamp: 4;
+                line-height: 1.3;
+            }
+
+            .video-badge {
+                font-size: 0.7rem;
+                padding: 2px 8px;
+            }
+        }
+
+        /* さらに小さい画面 */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .video-grid {
+                gap: 10px;
+            }
+
+            .video-thumbnail {
+                height: 100px;
+            }
+
+            .video-title {
+                font-size: 0.75rem;
+                -webkit-line-clamp: 5;
+                line-height: 1.2;
+            }
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            background: #f8f9fa;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>駿台小中学部YouTube動画リンク集</h1>
+        </div>
+
+        <div class="video-grid" id="videoGrid">
+            <!-- 動画カードがここに動的に生成されます -->
+        </div>
+    </div>
+
+    <script>
+        // 動画データ
+        const videos = [
+            {
+                title: "それ、思い込みかも？数学がもっと面白くなる話｜2025駿台スーパー数学講座開講に先立つ特別対談【2025.7.31 18時 公開予定】",
+                url: "https://youtube.com/live/X-cq-cPGJfw?feature=share",
+                id: "X-cq-cPGJfw"
+            },
+            {
+                title: "【ハイライト版】《未来をひらく学びのカタチ》 「大学のキャンパスに通う高校生！？ 北海道科学大高校の\"学び方改革\"」",
+                url: "https://youtu.be/CsEzZduvLg8",
+                id: "CsEzZduvLg8"
+            },
+            {
+                title: "【全編】《未来をひらく学びのカタチ》「大学のキャンパスに通う高校生！？ 北海道科学大高校の\"学び方改革\"」",
+                url: "https://youtube.com/live/j5xg-YjQ8UE",
+                id: "j5xg-YjQ8UE"
+            },
+            {
+                title: "【全編】2025第1回駿台ガイダンス【理科・社会編】",
+                url: "https://youtu.be/5fRXfCAIMt0",
+                id: "5fRXfCAIMt0"
+            }
+        ];
+
+        // YouTubeのVideo IDを抽出する関数
+        function extractVideoId(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/live\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        // YouTubeサムネイルURLを取得する関数
+        function getThumbnailUrl(videoId) {
+            return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        }
+
+        // 動画カードを作成する関数
+        function createVideoCard(video) {
+            const videoId = extractVideoId(video.url) || video.id;
+            const thumbnailUrl = getThumbnailUrl(videoId);
+            
+            return `
+                <div class="video-card" onclick="openVideo('${video.url}')">
+                    <div class="video-thumbnail">
+                        <img src="${thumbnailUrl}" alt="${video.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDMyMCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iMTgwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNDQgODBMMTc2IDk2TDE0NCAxMTJWODBaIiBmaWxsPSIjRkYwMDAwIi8+Cjx0ZXh0IHg9IjE2MCIgeT0iMTMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM2NTczODAiPllvdVR1YmUgVmlkZW88L3RleHQ+Cjwvc3ZnPgo='">
+                        <div class="play-button"></div>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${video.title}</div>
+                        <div class="video-badge">YouTube</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 動画を開く関数
+        function openVideo(url) {
+            window.open(url, '_blank');
+        }
+
+        // 動画グリッドを初期化する関数
+        function initializeVideoGrid() {
+            const videoGrid = document.getElementById('videoGrid');
+            const videoCards = videos.map(video => createVideoCard(video)).join('');
+            videoGrid.innerHTML = videoCards;
+        }
+
+        // ページ読み込み時に実行
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeVideoGrid();
+        });
+    </script>
+</body>
+</html>
